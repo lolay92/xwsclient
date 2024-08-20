@@ -5,8 +5,6 @@ using namespace lm;
 int main() {
     const std::string host = "api.hyperliquid.xyz"; 
 
-    std::cout << "Let's connect..." << std::endl; 
-
     try {
         asio::io_context ioc;
         std::make_shared<HlClient>(ioc, host)->run();

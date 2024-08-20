@@ -42,8 +42,6 @@ void HlClient::onWrite(const boost::system::error_code& ec, [[maybe_unused]] std
 void HlClient::onRead(const boost::system::error_code& ec, [[maybe_unused]] std::size_t bytes) {
     if (ec) return fail(ec, "Writing the subscription message failed");
 
-    std::cout << beast::buffers_to_string(m_buffer.data()) << "\n"; 
-
     m_buffer.consume(m_buffer.size()); 
 
     m_ws.async_read(m_buffer,
