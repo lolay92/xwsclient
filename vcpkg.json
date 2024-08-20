@@ -1,0 +1,10 @@
+{
+    "name":"ws-exchange-cient",
+    "dependencies" : [
+        "glog",
+        "gflags",
+        "boost-beast",
+        "nlohmann-json"
+    ],
+    "version": "0.0.1"
+}
