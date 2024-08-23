@@ -20,7 +20,7 @@ void IClient::run() {
 }
 
 void IClient::onResolve(const boost::system::error_code& ec, tcp::resolver::results_type endpoints) {
-    if (ec) return fail(ec, "DNS resolving error"); 
+    if (ec) return fail(ec, "DNS resolving failed"); 
     beast::get_lowest_layer(m_ws).async_connect(endpoints, 
     [self = shared_from_this()](const error_code& ec, tcp::resolver::results_type::endpoint_type endpoint_iter){
         self->onConnect(ec, endpoint_iter); 
@@ -28,7 +28,7 @@ void IClient::onResolve(const boost::system::error_code& ec, tcp::resolver::resu
 }
 
 void IClient::onConnect(const error_code& ec, tcp::resolver::results_type::endpoint_type endpoint_iter){
-    if (ec) return fail(ec, "Connection error");
+    if (ec) return fail(ec, "Connection failed");
     m_ws.async_handshake(m_host, "/ws",
     [self = shared_from_this()](const boost::system::error_code& ec){
         self->onHandshake(ec);
@@ -36,7 +36,7 @@ void IClient::onConnect(const error_code& ec, tcp::resolver::results_type::endpo
 }
 
 void IClient::onHandshake(const error_code& ec) {
-    if(ec) return fail(ec, "Handshake error");
+    if(ec) return fail(ec, "Handshake failed");
     subscribe(); 
 }
 

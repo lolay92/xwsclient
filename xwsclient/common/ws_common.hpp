@@ -1,3 +1,7 @@
+#ifndef WS_COMMON_HPP
+#define WS_COMMON_HPP
+
+
 #include <boost/beast/core.hpp>
 #include <boost/beast/websocket.hpp>
 #include <boost/asio/connect.hpp>
@@ -49,3 +53,5 @@ class IClient : public std::enable_shared_from_this<IClient> {
 };
 
 } // namespace lm
+
+#endif
