@@ -19,7 +19,6 @@ find_package(glog CONFIG REQUIRED)
 find_package(gflags CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 
-include_directories(${Boost_INCLUDE_DIRS})
 
 add_library(cxx_setup INTERFACE)
 target_include_directories(cxx_setup INTERFACE ${PROJECT_SOURCE_DIR})

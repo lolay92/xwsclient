@@ -41,7 +41,8 @@ class IClient : public std::enable_shared_from_this<IClient> {
         void onConnect(const error_code&, tcp::resolver::results_type::endpoint_type); 
         void onHandshake(const error_code&);
 
-        virtual void subscribe() = 0;  
+        virtual void subscribe() = 0; 
+
         virtual void onWrite(const error_code&, [[maybe_unused]] std::size_t bytes_transferred) = 0; 
         virtual void onRead(const error_code&, [[maybe_unused]] std::size_t bytes_transferred) = 0; 
 

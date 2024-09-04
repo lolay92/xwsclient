@@ -12,11 +12,13 @@ namespace lm {
 HlClient::HlClient(asio::io_context& ioc, const std::string& host,
             const std::string& user_address, const std::string& coin_symbol): 
             IClient(ioc, host), 
-            m_user_address(user_address),
-            m_coin_symbol(coin_symbol) {}
+            m_user_address(std::move(user_address)),
+            m_coin_symbol(std::move(coin_symbol)) {}
 
 void HlClient::subscribe() {
     // Hyperliquid subscribe Msg structure
+
+    // The goal is to be able to call 
 
     json subscription_msg = {
         {"method", "subscribe"},
@@ -33,20 +35,19 @@ void HlClient::subscribe() {
     // does not work. 
 
     m_ws.async_write(asio::buffer(subscription_msg.dump()), 
-        boost::bind(&HlClient::onWrite, 
-                    std::static_pointer_cast<HlClient>(shared_from_this()),
-                    boost::placeholders::_1,
-                    boost::placeholders::_2));
+        [self=std::static_pointer_cast<HlClient>(shared_from_this())](
+        const error_code& ec, std::size_t bytes) {
+            self->onWrite(ec, bytes); 
+    });
 }
 
 void HlClient::onWrite(const boost::system::error_code& ec, [[maybe_unused]] std::size_t bytes) {
     if (ec) return fail(ec, "Writing the subscription message failed");
 
-    m_ws.async_read(m_buffer,
-        boost::bind(&HlClient::onRead,
-                    std::static_pointer_cast<HlClient>(shared_from_this()),
-                    boost::placeholders::_1,
-                    boost::placeholders::_2)); 
+    m_ws.async_read(m_buffer, [self=std::static_pointer_cast<HlClient>(shared_from_this())](
+        const error_code& ec, std::size_t bytes) {
+            self->onRead(ec, bytes); 
+    });
 }
 
 void HlClient::onRead(const boost::system::error_code& ec, [[maybe_unused]] std::size_t bytes) {
@@ -55,11 +56,10 @@ void HlClient::onRead(const boost::system::error_code& ec, [[maybe_unused]] std:
     std::cout << beast::buffers_to_string(m_buffer.data()) << "\n";
     m_buffer.consume(m_buffer.size()); 
 
-    m_ws.async_read(m_buffer,
-        boost::bind(&HlClient::onRead,
-                    std::static_pointer_cast<HlClient>(shared_from_this()),
-                    boost::placeholders::_1,
-                    boost::placeholders::_2)); 
+    m_ws.async_read(m_buffer, [self=std::static_pointer_cast<HlClient>(shared_from_this())](
+        const error_code& ec, std::size_t bytes) {
+            self->onRead(ec, bytes); 
+    });
 }
 
 } // namespace lm
