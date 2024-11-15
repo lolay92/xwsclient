@@ -65,47 +65,9 @@ cmake -S . -B out/build/ -DCMAKE_TOOLCHAIN_FILE=[path_to_vcpkg]/scripts/buildsys
 cmake -S . -B out/build/ -DCMAKE_TOOLCHAIN_FILE=[path_to_vcpkg]/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release
 ```
 
-## Usage Example
-
-```cpp
-#include "xwsclient/hyperliquid/hlclient.hpp"
-using namespace lm;
-
-int main() {
-    const std::string host = "api.hyperliquid.xyz";
-    try {
-        std::cout << "Setting up..." << "\n";
-        asio::io_context ioc;
-        std::make_shared<HlClient>(ioc, host, "Client", "BTC")->run();
-        ioc.run();
-    }
-    catch (std::exception const& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return EXIT_FAILURE;
-    }
-    return EXIT_SUCCESS;
-}
-```
-
 ## API Documentation
 
-### HlClient Class
-The concrete implementation for HyperLiquid WebSocket API.
-
-```cpp
-class HlClient : public IClient {
-public:
-    HlClient(asio::io_context& ioc, ssl::context& ctx, 
-             const std::string& host,
-             const std::string& user_address,
-             const std::string& coin_symbol);
-
-    void subscribe();
-    // Additional methods...
-};
-```
-
-#### Methods
+### Methods
 - `subscribe()`: Subscribes to real-time candlestick data
 - `run()`: Starts the WebSocket client
 - `onWrite()`: Handles write completion
